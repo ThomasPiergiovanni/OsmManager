@@ -7,11 +7,12 @@ class ShopManager:
     def __init__(self):
         self.manager = ApiOsmManager()
         self.shops = []
+        self.valid_shops = []
 
-    def get_shop(self):
+    def get_shop(self, feature):
         self.manager._get_request(
             "shop",
-            "all",
+            feature,
             "92150"
         )
 
@@ -47,7 +48,6 @@ class ShopManager:
         return args[0].get(args[1], None)
 
     def validity_check(self, shops):
-        valid_list = []
         for item in shops:
             if (
                 item['geom_type'] and 
@@ -58,5 +58,4 @@ class ShopManager:
                 item['origin_id'] and
                 item['timestamp']
             ):
-                valid_list.append(item)
-        return valid_list
+                self.valid_shops.append(item)
