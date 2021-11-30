@@ -1,5 +1,6 @@
-
+from controller.shop_manager import ShopManager
 
 
 if __name__ == "__main__":
-    pass
+    shop = ShopManager()
+    shop.get_shop()
