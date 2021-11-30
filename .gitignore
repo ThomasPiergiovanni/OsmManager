@@ -1,0 +1,7 @@
+#  venv repo
+env/
+
+# file containing private settings
+
+#  pychache repos
+__pycache__/
