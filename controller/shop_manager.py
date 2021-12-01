@@ -1,3 +1,6 @@
+import csv
+import os
+
 from management.api_osm_manager import ApiOsmManager
 
 
@@ -59,3 +62,48 @@ class ShopManager:
                 item['timestamp']
             ):
                 self.valid_shops.append(item)
+
+    def export_data(self, path_to_file, filename, data):
+        data_file = os.path.join(path_to_file, filename)
+        with open(data_file, 'w', newline='',  encoding='utf8') as file:
+            filewriter = csv.writer(
+                file, delimiter=';',
+                quotechar='"',
+                quoting=csv.QUOTE_MINIMAL
+            )
+            filewriter.writerow([
+                "origin_id",
+                "timestamp",
+                "geom_type",
+                "feature",
+                "name",
+                "brand",
+                "operator",
+                "opening_hours",
+                "wheelchair",
+                "housenumber",
+                "street",
+                "postcode",
+                "lat",
+                "lon",
+                ]
+            )
+            for shop in data:
+                filewriter.writerow(
+                    [
+                        shop['origin_id'],
+                        shop['timestamp'],
+                        shop['geom_type'],
+                        shop['feature'],
+                        shop['name'],
+                        shop['brand'],
+                        shop['operator'],
+                        shop['opening_hours'],
+                        shop['wheelchair'],
+                        shop['housenumber'],
+                        shop['street'],
+                        shop['postcode'],
+                        shop['lat'],
+                        shop['lon'],
+                    ]
+                )
