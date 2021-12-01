@@ -285,8 +285,9 @@ def test_get_item(shop_json_item):
 
 def test_validity_check(shops_list):
     shop_manager = ShopManager()
-    returned = shop_manager.validity_check(shops_list)
-    assert returned[0]['geom_type'] == 'node'
-    assert returned[0]['origin_id'] == '3877278811'
-    assert returned[0]['lat'] == 48.8756102
-    assert returned[0]['lon'] == 2.2284295
+    shop_manager.validity_check(shops_list)
+    assert shop_manager.valid_shops[0]['geom_type'] == 'node'
+    assert shop_manager.valid_shops[0]['geom_type'] == 'node'
+    assert shop_manager.valid_shops[0]['origin_id'] == '3877278811'
+    assert shop_manager.valid_shops[0]['lat'] == 48.8756102
+    assert shop_manager.valid_shops[0]['lon'] == 2.2284295
