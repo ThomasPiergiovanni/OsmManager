@@ -125,23 +125,21 @@ def test_filter_raw_json(bus_stop_json):
     assert bus_stop_manager.bus_stops[2]['name'] == 'Garibaldi'
 
 
-# def test_get_timestamp(shop_json):
-#     shop_manager = ShopManager()
-#     returned = shop_manager._ShopManager__get_timestamp(shop_json)
-#     assert returned == '2021-11-30T12:26:52Z'
+def test_get_timestamp(bus_stop_json):
+    bus_stop_manager = BusStopManager()
+    returned = bus_stop_manager._BusStopManager__get_timestamp(bus_stop_json)
+    assert returned == '2021-12-01T16:35:38Z'
 
-# def test_get_item(shop_json_item):
-#     shop_manager = ShopManager()
-#     returned = shop_manager._ShopManager__get_item(
-#         shop_json_item,
-#         'wheelchair'
-#     )
-#     assert returned == 'yes'
+def test_get_item(bus_stop_json_item):
+    bus_stop_manager = BusStopManager()
+    returned = bus_stop_manager._BusStopManager__get_item(
+        bus_stop_json_item,
+        'tactile_paving'
+    )
+    assert returned == 'no'
 
-# def test_validity_check(shops_list):
-#     shop_manager = ShopManager()
-#     returned = shop_manager.validity_check(shops_list)
-#     assert returned[0]['geom_type'] == 'node'
-#     assert returned[0]['origin_id'] == '3877278811'
-#     assert returned[0]['lat'] == 48.8756102
-#     assert returned[0]['lon'] == 2.2284295
+def test_validity_check(bus_stops_list):
+    bus_stop_manager = BusStopManager()
+    bus_stop_manager.validity_check(bus_stops_list)
+    assert bus_stop_manager.valid_bus_stops[0]['lat'] == 48.863521
+

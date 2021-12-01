@@ -10,7 +10,7 @@ class BusStopManager:
     def __init__(self):
         self.manager = ApiOsmManager()
         self.bus_stops = []
-        self.valid_shops = []
+        self.valid_bus_stops = []
 
     def get_bus_stop(self, feature):
         self.manager._get_request(
@@ -30,12 +30,12 @@ class BusStopManager:
             bus_stop['origin_id'] = self.__get_item(items, 'id')
             bus_stop['timestamp'] = timestamp
             bus_stop['geom_type'] = self.__get_item(items, 'type')
-            bus_stop['feature'] = self.__get_item(tags, 'amenity')
+            bus_stop['feature'] = self.__get_item(tags, 'highway')
             bus_stop['name'] = self.__get_item(tags, 'name')
             bus_stop['shelter'] = self.__get_item(tags, 'shelter')
             bus_stop['bench'] = self.__get_item(tags, 'bench')
             bus_stop['wheelchair'] = self.__get_item(tags, 'wheelchair')
-            bus_stop['tactile_paving'] = self.__get_item(tags, 'wheelchair')
+            bus_stop['tactile_paving'] = self.__get_item(tags, 'tactile_paving')
             bus_stop['route_ref'] = self.__get_item(tags, 'route_ref')
             bus_stop['lat'] = self.__get_item(items, 'lat')
             bus_stop['lon'] = self.__get_item(items, 'lon')
@@ -48,8 +48,8 @@ class BusStopManager:
     def __get_item(self, *args):
         return args[0].get(args[1], None)
 
-    def validity_check(self, shops):
-        for item in shops:
+    def validity_check(self, bus_stops):
+        for item in bus_stops:
             if (
                 item['geom_type'] and 
                 item['feature'] and 
@@ -59,7 +59,7 @@ class BusStopManager:
                 item['origin_id'] and
                 item['timestamp']
             ):
-                self.valid_shops.append(item)
+                self.valid_bus_stops.append(item)
 
     def export_data(self, path_to_file, filename, data):
         data_file = os.path.join(path_to_file, filename)
@@ -75,33 +75,29 @@ class BusStopManager:
                 "geom_type",
                 "feature",
                 "name",
-                "brand",
-                "operator",
-                "opening_hours",
+                "shelter",
+                "bench",
                 "wheelchair",
-                "housenumber",
-                "street",
-                "postcode",
+                "tactile_paving",
+                "route_ref",
                 "lat",
                 "lon",
                 ]
             )
-            for shop in data:
+            for bus_stop in data:
                 filewriter.writerow(
                     [
-                        shop['origin_id'],
-                        shop['timestamp'],
-                        shop['geom_type'],
-                        shop['feature'],
-                        shop['name'],
-                        shop['brand'],
-                        shop['operator'],
-                        shop['opening_hours'],
-                        shop['wheelchair'],
-                        shop['housenumber'],
-                        shop['street'],
-                        shop['postcode'],
-                        shop['lat'],
-                        shop['lon'],
+                        bus_stop['origin_id'],
+                        bus_stop['timestamp'],
+                        bus_stop['geom_type'],
+                        bus_stop['feature'],
+                        bus_stop['name'],
+                        bus_stop['shelter'],
+                        bus_stop['bench'],
+                        bus_stop['wheelchair'],
+                        bus_stop['tactile_paving'],
+                        bus_stop['route_ref'],
+                        bus_stop['lat'],
+                        bus_stop['lon']
                     ]
                 )
