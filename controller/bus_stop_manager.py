@@ -103,7 +103,7 @@ class BusStopManager:
                         bus_stop['lon']
                     ]
                 )
-    def export_geojson(self, path_to_file, data):
+    def export_geojson(self, path_to_file, filename, data):
         features = []
         for item in data:
             point = Point((item['lon'], item['lat']))
@@ -116,7 +116,7 @@ class BusStopManager:
             ))
         feature_collection = FeatureCollection(features)
 
-        data_file = os.path.join(path_to_file, "test_bs_gjson.geojson")
+        data_file = os.path.join(path_to_file, filename)
         with open(data_file, 'w', encoding='utf8') as file:
             dump(feature_collection, file)
 

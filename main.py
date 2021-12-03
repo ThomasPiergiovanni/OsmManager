@@ -2,6 +2,7 @@ from config.settings import (
     OUTPUT_FILE,
     OUTPUT_SHOP_FILENAME,
     OUTPUT_BUS_STOP_FILENAME,
+    BUS_STOP_GJSON
 
 )
 from controller.bus_stop_manager import BusStopManager
@@ -25,7 +26,10 @@ def get_osm_bus_stop():
     #     OUTPUT_BUS_STOP_FILENAME,
     #     bus_stop.valid_bus_stops
     # )
-    bus_stop.export_geojson(OUTPUT_FILE, bus_stop.valid_bus_stops)
+    bus_stop.export_geojson(OUTPUT_FILE,
+        BUS_STOP_GJSON,
+        bus_stop.valid_bus_stops
+    )
 
 def get_cycleway():
     cycleway = CyclewayManager()
