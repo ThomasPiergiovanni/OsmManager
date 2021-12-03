@@ -16,7 +16,10 @@ class ApiOsmManager:
         """
         endpoint = self.__set_endpoint()
         header = {}
-        overpass_querry = self.__set_querry(tag, feature, postal_code)
+        if feature == "cycleway":
+            overpass_querry = self.__set_line_querry(tag, feature, postal_code)
+        else:
+            overpass_querry = self.__set_querry(tag, feature, postal_code)
         params={'data':overpass_querry}
         response = requests.get(endpoint, headers=header, params=params, verify=False)
         self.response = response
@@ -51,6 +54,34 @@ class ApiOsmManager:
                 [out:json];
                 area["postal_code"=""" + postal_code + """][admin_level=8];
                 node[""" + tag + """~""" + feature + """](area)->.feature;
+                (
+                    .feature;
+                )->.all;
+                (.all;);
+                out geom;
+            """
+        return overpass_querry
+
+    def __set_line_querry(self, tag, feature, postal_code):
+        overpass_querry = None
+        if feature == "all":
+            overpass_querry = """
+                [timeout:900]
+                [out:json];
+                area["postal_code"=""" + postal_code + """][admin_level=8];
+                way[""" + tag + """](area)->.feature;
+                (
+                    .feature;
+                )->.all;
+                (.all;);
+                out geom;
+            """
+        else:
+            overpass_querry = """
+                [timeout:900]
+                [out:json];
+                area["postal_code"=""" + postal_code + """][admin_level=8];
+                way[""" + tag + """~""" + feature + """](area)->.feature;
                 (
                     .feature;
                 )->.all;

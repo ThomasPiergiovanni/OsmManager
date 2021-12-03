@@ -1,6 +1,8 @@
 import csv
 import os
 
+from geojson import Point, Feature, FeatureCollection, dump
+
 from management.api_osm_manager import ApiOsmManager
 
 
@@ -81,7 +83,7 @@ class BusStopManager:
                 "tactile_paving",
                 "route_ref",
                 "lat",
-                "lon",
+                "lon"
                 ]
             )
             for bus_stop in data:
@@ -101,3 +103,21 @@ class BusStopManager:
                         bus_stop['lon']
                     ]
                 )
+    def export_geojson(self, path_to_file, data):
+        features = []
+        for item in data:
+            point = Point((item['lon'], item['lat']))
+            features.append(Feature(
+                geometry=point,
+                properties={
+                    "origin_id": item['origin_id'],
+                    "name": item['name']
+                }
+            ))
+        feature_collection = FeatureCollection(features)
+
+        data_file = os.path.join(path_to_file, "test_bs_gjson.geojson")
+        with open(data_file, 'w', encoding='utf8') as file:
+            dump(feature_collection, file)
+
+
