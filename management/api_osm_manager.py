@@ -16,10 +16,12 @@ class ApiOsmManager:
         """
         endpoint = self.__set_endpoint()
         header = {}
-        if feature == "cycleway":
+        if tag == "highway" and feature == "cycleway":
             overpass_querry = self.__set_line_querry(tag, feature, postal_code)
-        else:
-            overpass_querry = self.__set_querry(tag, feature, postal_code)
+        if tag == "bicycle":
+            overpass_querry = self.__set_line_querry(tag, feature, postal_code)
+        # else:
+        #     overpass_querry = self.__set_querry(tag, feature, postal_code)
         params={'data':overpass_querry}
         response = requests.get(endpoint, headers=header, params=params, verify=False)
         self.response = response

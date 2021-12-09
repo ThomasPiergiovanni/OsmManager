@@ -6,18 +6,18 @@ from geojson import LineString, Feature, FeatureCollection, dump
 from management.api_osm_manager import ApiOsmManager
 
 
-class CyclewayManager:
+class BicycleManager:
     """
     """
     def __init__(self):
         self.manager = ApiOsmManager()
-        self.cycleways = []
-        self.valid_cycleways = []
+        self.bicycles = []
+        self.valid_bicycles = []
 
-    def get_cycleway(self):
+    def get_bicycle(self):
         self.manager._get_request(
-            "highway",
-            "cycleway",
+            "bicycle",
+            "all",
             "92150"
         )
 
@@ -27,20 +27,19 @@ class CyclewayManager:
         """
         timestamp = self.__get_timestamp(raw_json)
         for items in self.__get_item(raw_json, 'elements'):
-            cycleway = {}
-            nodes =  self.__get_item(items, 'nodes')
+            bicycle = {}
             geometry =  self.__get_item(items, 'geometry')
             tags =  self.__get_item(items, 'tags')
-            cycleway['origin_id'] = self.__get_item(items, 'id')
-            cycleway['timestamp'] = timestamp
-            cycleway['geom_type'] = self.__get_item(items, 'type')
-            cycleway['feature'] = self.__get_item(tags, 'highway')
-            cycleway['name'] = self.__get_item(tags, 'name')
-            cycleway['oneway'] = self.__get_item(tags, 'oneway')
-            cycleway['surface'] = self.__get_item(tags, 'surface')
-            cycleway['nodes'] = self.__get_item(items, 'nodes')
-            cycleway['geometry'] = self.__get_item(items, 'geometry')
-            self.cycleways.append(cycleway)
+            bicycle['origin_id'] = self.__get_item(items, 'id')
+            bicycle['timestamp'] = timestamp
+            bicycle['geom_type'] = self.__get_item(items, 'type')
+            bicycle['feature'] = self.__get_item(tags, 'bicycle')
+            bicycle['name'] = self.__get_item(tags, 'name')
+            bicycle['oneway'] = self.__get_item(tags, 'oneway')
+            bicycle['surface'] = self.__get_item(tags, 'surface')
+            bicycle['segregated'] = self.__get_item(tags, 'segregated')
+            bicycle['geometry'] = self.__get_item(items, 'geometry')
+            self.bicycles.append(bicycle)
 
     def __get_timestamp(self, raw_json):
          items = self.__get_item(raw_json, 'osm3s')
@@ -49,17 +48,16 @@ class CyclewayManager:
     def __get_item(self, *args):
         return args[0].get(args[1], None)
 
-    def validity_check(self, bus_stops):
-        for item in bus_stops:
+    def validity_check(self, bicycles):
+        for item in bicycles:
             if (
                 item['geom_type'] and 
                 item['feature'] and 
-                item['nodes'][0] and
                 item['geometry'][0] and
                 item['origin_id'] and
                 item['timestamp']
             ):
-                self.valid_cycleways.append(item)
+                self.valid_bicycles.append(item)
 
     def export_geojson(self, path_to_file, filename, data):
         features = []
@@ -75,7 +73,9 @@ class CyclewayManager:
                         'type_objet': item['feature'],
                         'nom': item['name'],
                         'sens_unique': item['oneway'],
-                        'surface': item['surface']
+                        'surface': item['surface'],
+                        'site_propre': item['segregated'],
+
                     }
                 )
             )
