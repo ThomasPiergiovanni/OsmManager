@@ -13,11 +13,7 @@ class ShopManager:
         self.valid_shops = []
 
     def get_shop(self, feature):
-        self.manager._get_request(
-            "shop",
-            feature,
-            "92150"
-        )
+        self.manager._get_request("shop", "all","92150")
 
     def filter_raw_json(self, raw_json):
         """ method that filters items having all wanted key populated. Items

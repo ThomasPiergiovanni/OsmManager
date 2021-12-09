@@ -107,13 +107,23 @@ class BusStopManager:
         features = []
         for item in data:
             point = Point((item['lon'], item['lat']))
-            features.append(Feature(
-                geometry=point,
-                properties={
-                    "origin_id": item['origin_id'],
-                    "name": item['name']
-                }
-            ))
+            features.append(
+                Feature(
+                    geometry=point,
+                    properties={
+                        'origin_id': item['origin_id'],
+                        'timestamp': item['timestamp'],
+                        'type_geom':item['geom_type'],
+                        'type_objet': item['feature'],
+                        'nom': item['name'],
+                        'abris': item['shelter'],
+                        'banc': item['bench'],
+                        'fauteuil_roulant': item['wheelchair'],
+                        'route_ref': item['route_ref']
+
+                    }
+                )
+            )
         feature_collection = FeatureCollection(features)
 
         data_file = os.path.join(path_to_file, filename)
